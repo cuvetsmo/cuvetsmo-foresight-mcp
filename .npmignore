@@ -1,0 +1,10 @@
+src
+scripts
+.github
+node_modules
+.gitignore
+tsconfig.json
+tsup.config.ts
+CLAUDE.md
+AGENTS.md
+*.tsbuildinfo

@@ -1,0 +1,49 @@
+{
+  "name": "foresight-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for the Foresight forecasting marketplace — five tools that let any MCP-aware agent browse, propose, dry-run-resolve, and stream events for prediction markets.",
+  "type": "module",
+  "bin": {
+    "foresight-mcp": "./dist/server.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "prediction-market",
+    "forecasting",
+    "ai-agent",
+    "claude",
+    "anthropic",
+    "foresight"
+  ],
+  "homepage": "https://foresight.cuvetsmo.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cuvetsmo/cuvetsmo-foresight-mcp"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.6.3"
+  }
+}
