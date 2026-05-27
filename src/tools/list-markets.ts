@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { ToolDef } from "../lib/types.js";
-import { MARKETS } from "../data/markets.js";
+import { getMarkets } from "../data/source.js";
 
 const Input = z.object({
   category: z
@@ -33,7 +33,8 @@ export const listMarketsTool: ToolDef<typeof Input> = {
     "Browse the live forecasting marketplace. Filter by category (thai-politics, crypto, ai-research, etc.) and status, sort by volume or deadline. Returns market id, slug, question, YES probability, volume, open interest, and closing date. Read-only; no cost.",
   schema: Input,
   handler: async (args) => {
-    let pool = [...MARKETS];
+    const { markets, live } = await getMarkets();
+    let pool = [...markets];
 
     if (args.category) pool = pool.filter((m) => m.category === args.category);
     if (args.status) pool = pool.filter((m) => m.status === args.status);
@@ -72,6 +73,7 @@ export const listMarketsTool: ToolDef<typeof Input> = {
       count: trimmed.length,
       totalAvailable: pool.length,
       filters: { category: args.category, status: args.status, sortBy: args.sortBy },
+      source: live ? "live" : "bundled-seed",
       markets: trimmed,
     };
   },

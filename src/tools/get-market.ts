@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { ToolDef } from "../lib/types.js";
-import { getMarketById, getMarketBySlug } from "../data/markets.js";
+import { findMarket } from "../data/source.js";
 import { NotFoundError } from "../lib/errors.js";
 
 const Input = z.object({
@@ -18,8 +18,7 @@ export const getMarketTool: ToolDef<typeof Input> = {
     "Get full details for a single market: question, current YES probability, NO probability, price history, volume, open interest, deadline, resolution criteria, named primary sources, tags, creator. Use after foresight_list_markets to drill into one.",
   schema: Input,
   handler: async (args) => {
-    const market =
-      getMarketById(args.identifier) ?? getMarketBySlug(args.identifier);
+    const market = await findMarket(args.identifier);
     if (!market) {
       throw new NotFoundError("foresight", `market '${args.identifier}'`);
     }

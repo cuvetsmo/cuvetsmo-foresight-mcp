@@ -1,6 +1,6 @@
 {
   "name": "foresight-mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "MCP server for the Foresight forecasting marketplace — five tools that let any MCP-aware agent browse, propose, dry-run-resolve, and stream events for prediction markets.",
   "type": "module",
   "bin": {

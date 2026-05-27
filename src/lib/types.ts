@@ -55,4 +55,6 @@ export interface Market {
   priceHistory?: number[];
   createdBy: string;
   tags: string[];
+  /** TRUE if curated sample (no real trades). Phase 0 = always true. */
+  isSample?: boolean;
 }

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { ToolDef } from "../lib/types.js";
-import { getMarketById, getMarketBySlug } from "../data/markets.js";
+import { findMarket } from "../data/source.js";
 import { NotFoundError, ResolverError } from "../lib/errors.js";
 
 const Input = z.object({
@@ -41,8 +41,7 @@ export const resolveCheckTool: ToolDef<typeof Input> = {
     "Dry-run the multi-source verifier for a market without writing any resolution. Returns the proposed outcome, confidence, reasoning, and which sources were checked. If the result is ambiguous, the verifier refuses to commit — the appeal path is surfaced instead. Read-only; never mutates market state.",
   schema: Input,
   handler: async (args) => {
-    const market =
-      getMarketById(args.identifier) ?? getMarketBySlug(args.identifier);
+    const market = await findMarket(args.identifier);
     if (!market) {
       throw new NotFoundError("foresight", `market '${args.identifier}'`);
     }
