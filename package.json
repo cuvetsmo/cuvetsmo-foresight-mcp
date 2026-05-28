@@ -1,7 +1,7 @@
 {
   "name": "foresight-mcp",
-  "version": "0.3.0",
-  "description": "MCP server for the Foresight forecasting marketplace — six tools that let any MCP-aware agent browse, propose, dry-run-resolve, stream events, and cross-reference Polymarket/Kalshi/Manifold for prediction markets.",
+  "version": "0.4.0",
+  "description": "MCP server for the Foresight forecasting marketplace — eight tools that let any MCP-aware agent browse, propose, dry-run-resolve, stream events, cross-reference Polymarket/Kalshi/Manifold, search ArXiv, and ground entities via Wikidata.",
   "type": "module",
   "bin": {
     "foresight-mcp": "./dist/server.js"
@@ -16,7 +16,8 @@
     "dev": "tsup --watch",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
-    "smoke": "node scripts/smoke.mjs"
+    "smoke": "node scripts/smoke.mjs",
+    "test:parse": "node scripts/test-arxiv-parse.mjs"
   },
   "keywords": [
     "mcp",

@@ -5,6 +5,8 @@ import { proposeMarketTool } from "./propose-market.js";
 import { resolveCheckTool } from "./resolve-check.js";
 import { streamEventsTool } from "./stream-events.js";
 import { crossVenueTool } from "./cross-venue.js";
+import { arxivSearchTool } from "./arxiv-search.js";
+import { wikidataEntityTool } from "./wikidata-entity.js";
 
 /**
  * Wire every tool into the registry. Phase 0 tools have no external
@@ -24,6 +26,8 @@ export function registerAll(registry: Registry): {
   registry.add(resolveCheckTool);
   registry.add(streamEventsTool);
   registry.add(crossVenueTool);
+  registry.add(arxivSearchTool);
+  registry.add(wikidataEntityTool);
 
   return { registered: registry.names(), warnings };
 }

@@ -81,7 +81,7 @@ function assert(cond, msg) {
   // 3. list tools
   const list = await send(makeRequest("tools/list", {}));
   const toolNames = list.result?.tools?.map((t) => t.name) ?? [];
-  assert(toolNames.length === 6, `tools/list returns 6 tools (got ${toolNames.length}: ${toolNames.join(", ")})`);
+  assert(toolNames.length === 8, `tools/list returns 8 tools (got ${toolNames.length}: ${toolNames.join(", ")})`);
   for (const expected of [
     "foresight_list_markets",
     "foresight_get_market",
@@ -89,6 +89,8 @@ function assert(cond, msg) {
     "foresight_resolve_check",
     "foresight_stream_events",
     "foresight_cross_venue",
+    "foresight_arxiv_search",
+    "foresight_wikidata_entity",
   ]) {
     assert(toolNames.includes(expected), `tools/list includes ${expected}`);
   }
@@ -180,6 +182,42 @@ function assert(cond, msg) {
     cvErr.result?.isError === true,
     "foresight_cross_venue returns isError when neither identifier nor query is given",
   );
+
+  // 12. wikidata entity grounding — live, auth-free, deterministic enough
+  //     ("Anthropic" reliably resolves to a Q-id). Skip gracefully if the
+  //     network is unavailable so offline CI still passes the wiring check.
+  const wd = await send(
+    makeRequest("tools/call", {
+      name: "foresight_wikidata_entity",
+      arguments: { query: "Anthropic", limit: 3 },
+    }),
+  );
+  if (wd.result?.isError) {
+    console.log("⚠ wikidata live lookup unavailable (offline?) — wiring OK, skipping content assert");
+  } else {
+    const wdData = JSON.parse(wd.result?.content?.[0]?.text ?? "{}");
+    assert(
+      Array.isArray(wdData.entities) && wdData.entities.every((e) => /^Q\d+$/.test(e.qid)),
+      "foresight_wikidata_entity returns entities with valid Q-ids",
+    );
+  }
+
+  // 13. arxiv search — live, auth-free. "transformer" reliably returns papers.
+  const ax = await send(
+    makeRequest("tools/call", {
+      name: "foresight_arxiv_search",
+      arguments: { query: "all:transformer", maxResults: 2 },
+    }),
+  );
+  if (ax.result?.isError) {
+    console.log("⚠ arxiv live lookup unavailable (offline?) — wiring OK, skipping content assert");
+  } else {
+    const axData = JSON.parse(ax.result?.content?.[0]?.text ?? "{}");
+    assert(
+      Array.isArray(axData.papers) && typeof axData.count === "number",
+      "foresight_arxiv_search returns a papers array + count",
+    );
+  }
 
   console.log("\nALL SMOKE ASSERTIONS PASSED.");
   server.kill();
