@@ -4,6 +4,7 @@ import { getMarketTool } from "./get-market.js";
 import { proposeMarketTool } from "./propose-market.js";
 import { resolveCheckTool } from "./resolve-check.js";
 import { streamEventsTool } from "./stream-events.js";
+import { crossVenueTool } from "./cross-venue.js";
 
 /**
  * Wire every tool into the registry. Phase 0 tools have no external
@@ -22,6 +23,7 @@ export function registerAll(registry: Registry): {
   registry.add(proposeMarketTool);
   registry.add(resolveCheckTool);
   registry.add(streamEventsTool);
+  registry.add(crossVenueTool);
 
   return { registered: registry.names(), warnings };
 }

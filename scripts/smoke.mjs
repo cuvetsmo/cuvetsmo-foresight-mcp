@@ -81,13 +81,14 @@ function assert(cond, msg) {
   // 3. list tools
   const list = await send(makeRequest("tools/list", {}));
   const toolNames = list.result?.tools?.map((t) => t.name) ?? [];
-  assert(toolNames.length === 5, `tools/list returns 5 tools (got ${toolNames.length}: ${toolNames.join(", ")})`);
+  assert(toolNames.length === 6, `tools/list returns 6 tools (got ${toolNames.length}: ${toolNames.join(", ")})`);
   for (const expected of [
     "foresight_list_markets",
     "foresight_get_market",
     "foresight_propose_market",
     "foresight_resolve_check",
     "foresight_stream_events",
+    "foresight_cross_venue",
   ]) {
     assert(toolNames.includes(expected), `tools/list includes ${expected}`);
   }
@@ -169,7 +170,18 @@ function assert(cond, msg) {
   assert(Array.isArray(seData.events), "foresight_stream_events returns an events array");
   assert(typeof seData.cursor === "string", "foresight_stream_events returns a cursor");
 
-  console.log("\nALL 13 ASSERTIONS PASSED.");
+  // 11. cross_venue with NEITHER identifier NOR query — deterministic error,
+  //     no network needed (fails the guard before any fetch). This proves
+  //     the tool is wired without depending on live venue APIs in CI.
+  const cvErr = await send(
+    makeRequest("tools/call", { name: "foresight_cross_venue", arguments: {} }),
+  );
+  assert(
+    cvErr.result?.isError === true,
+    "foresight_cross_venue returns isError when neither identifier nor query is given",
+  );
+
+  console.log("\nALL SMOKE ASSERTIONS PASSED.");
   server.kill();
   process.exit(0);
 })().catch((err) => {

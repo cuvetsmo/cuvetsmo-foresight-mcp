@@ -42,3 +42,17 @@ export class ResolverError extends FSError {
     this.name = "ResolverError";
   }
 }
+
+/**
+ * An external/upstream dependency (the Foresight API, or a third-party
+ * venue API it proxies) failed or was unreachable. Distinct from
+ * ValidationError (bad input) and ConfigError (bad local setup) — this
+ * is "the network/remote let us down." Reused by every tool that calls
+ * a live endpoint (cross-venue, future WAHIS/BoT/ArXiv source tools).
+ */
+export class UpstreamError extends FSError {
+  constructor(detail: string) {
+    super(`Upstream error — ${detail}`, "UPSTREAM", "upstream");
+    this.name = "UpstreamError";
+  }
+}

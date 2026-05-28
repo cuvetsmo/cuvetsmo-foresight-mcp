@@ -35,7 +35,7 @@ function isOffline(): boolean {
   return v === "1" || v === "true";
 }
 
-function apiBase(): string {
+export function apiBase(): string {
   return process.env.FORESIGHT_API_BASE || DEFAULT_BASE;
 }
 

@@ -1,7 +1,7 @@
 {
   "name": "foresight-mcp",
-  "version": "0.2.0",
-  "description": "MCP server for the Foresight forecasting marketplace — five tools that let any MCP-aware agent browse, propose, dry-run-resolve, and stream events for prediction markets.",
+  "version": "0.3.0",
+  "description": "MCP server for the Foresight forecasting marketplace — six tools that let any MCP-aware agent browse, propose, dry-run-resolve, stream events, and cross-reference Polymarket/Kalshi/Manifold for prediction markets.",
   "type": "module",
   "bin": {
     "foresight-mcp": "./dist/server.js"
